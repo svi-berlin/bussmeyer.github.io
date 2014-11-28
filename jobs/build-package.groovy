@@ -24,6 +24,8 @@ branches.each {
                 // Artefakte archivieren
                 // Send artifacts over SSH?
         }
-        chucknorris {}
+        publishers {
+            chucknorris()
+        }
     }
 }
