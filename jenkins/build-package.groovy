@@ -18,6 +18,7 @@ branches.each {
 
             // Build
             // Package
+                // Persist artefacts somewhere.
 
             // Post Build
                 // Activate Chuck Norris
