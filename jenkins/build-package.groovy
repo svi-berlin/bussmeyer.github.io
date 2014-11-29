@@ -15,8 +15,8 @@ branches.each {
         }
         steps {
             // Build
-            def fpmCommandBasics = "fpm -s dir -t rpm --name ${project}"
-            def fpmCommandVersions = '--version 1 --iteration ${BUILD_NUMBER}'.replaceAll('/','-')
+            def fpmCommandBasics = "fpm -s dir -t rpm --name ${project}".replaceAll('/','-')
+            def fpmCommandVersions = '--version 1 --iteration ${BUILD_NUMBER}'
             def fpmCommandLogs = "--log info --verbose"
             def fpmCommandProject = '--description "Static Test Site" --maintainer "thomas.bussmeyer@pixelpark.com" --vendor "admin@pixelpark.com" --url "http://www.pixelpark.com" "${WORKSPACE}/src"'
             shell("${fpmCommandBasics} ${fpmCommandVersions} ${fpmCommandLogs} ${fpmCommandProject}")
