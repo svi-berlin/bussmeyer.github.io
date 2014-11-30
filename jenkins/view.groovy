@@ -3,7 +3,7 @@ def project = 'Bussmeyer/bussmeyer.github.io'
 view {
     name "${project}" .replaceAll('/','-')
     jobs {
-        regex(".*${project}.*").replaceAll('/','-')
+        //regex(".*${project}.*").replaceAll('/','-')
     }
     columns {
         status()
