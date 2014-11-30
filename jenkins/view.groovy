@@ -1,9 +1,9 @@
 // Creates a View for the Project
+def project = 'Bussmeyer/bussmeyer.github.io'
 view {
-    // common options
-    name("PP Test Projekt")
+    name("${project}")
     jobs {
-        regex(".*PP Test.*")
+        regex(".*${project}.*")
     }
     columns {
         status()

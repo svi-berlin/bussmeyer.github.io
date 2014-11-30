@@ -1,7 +1,16 @@
 // Parameter
     // Environment
-    // Artefakt
-
+    // Branch
+    // Artefakt/Buildnummer
+// Wenn Environment ein Param ist, dann reicht vielleicht auch ein Job?
+// Auf dem Zielserver:
+    // # yum clean expire-cache
+    // und
+    // yum update Bussmeyer-bussmeyer.github.io-1-11
+    // yum downgrade Bussmeyer-bussmeyer.github.io-1-11
+    // oder
+    // yum remove Bussmeyer-bussmeyer.github.io
+    // yum install Bussmeyer-bussmeyer.github.io-1-11
 
 
 job {
