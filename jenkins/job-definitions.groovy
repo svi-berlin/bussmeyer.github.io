@@ -2,7 +2,7 @@ def project = 'Bussmeyer/bussmeyer.github.io'
 def projectFilter = "${project}".replaceAll('/','-')
 def branchApi = new URL("https://api.github.com/repos/${project}/branches")
 def branches = new groovy.json.JsonSlurper().parse(branchApi.newReader())
-def environments = ['dev', 'test', 'live']
+def environments = ['Dev', 'Test', 'Live']
 
 // Creates a View for the Project
 view {
@@ -73,17 +73,16 @@ branches.each {
     // oder
     // yum remove Bussmeyer-bussmeyer.github.io
     // yum install Bussmeyer-bussmeyer.github.io-1-11
-//def project = 'Bussmeyer/bussmeyer.github.io'
-//def environments = ['dev', 'test', 'live']
-//job {
-//    name "${project} - 2 Deployment Jobs - Deploy to Dev".replaceAll('/','-')
-//    steps {
-        //maven("test -Dproject.name=${project}/${branchName}")
-//    }
-//    publishers {
-//        chucknorris()
-//    }
-//}
-
+environments.each {
+    job {
+        name "${project} - 2 Deployment Jobs - Deploy to ${it}".replaceAll('/','-')
+        steps {
+            //maven("test -Dproject.name=${project}/${branchName}")
+        }
+        publishers {
+            chucknorris()
+        }
+    }
+}
 
 // Database syncs
