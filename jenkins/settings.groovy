@@ -1,4 +1,5 @@
-def static getSettings() {
-  project = 'Bussmeyer/bussmeyer.github.io'
-  return 'Bussmeyer/bussmeyer.github.io'
+class Settings {
+  def getProject() {
+    return 'Bussmeyer/bussmeyer.github.io'
+  }
 }

@@ -1,5 +1,10 @@
 // Creates a View for the Project
-def settings = settings.getSettings()
+def script = new GroovyScriptEngine( '.' ).with {
+    loadScriptByName( 'settings.groovy' )
+}
+this.metaClass.mixin script
+
+getProject()
 
 def project = 'Bussmeyer/bussmeyer.github.io'
 def projectFilter = "${project}".replaceAll('/','-')
