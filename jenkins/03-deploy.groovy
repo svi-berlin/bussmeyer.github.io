@@ -12,33 +12,13 @@
     // yum remove Bussmeyer-bussmeyer.github.io
     // yum install Bussmeyer-bussmeyer.github.io-1-11
 def project = 'Bussmeyer/bussmeyer.github.io'
-
-job {
-    name "${project} - 2 Deployment Jobs - Deploy to Dev".replaceAll('/','-')
-    steps {
+def environments = ['dev', 'test', 'live']
+//job {
+//    name "${project} - 2 Deployment Jobs - Deploy to Dev".replaceAll('/','-')
+//    steps {
         //maven("test -Dproject.name=${project}/${branchName}")
-    }
-    publishers {
-        chucknorris()
-    }
-}
-
-job {
-    name "${project} - 2 Deployment Jobs - Deploy to Test".replaceAll('/','-')
-    steps {
-        //maven("test -Dproject.name=${project}/${branchName}")
-    }
-    publishers {
-        chucknorris()
-    }
-}
-
-job {
-    name "${project} - 2 Deployment Jobs - Deploy to Live".replaceAll('/','-')
-    steps {
-        //maven("test -Dproject.name=${project}/${branchName}")
-    }
-    publishers {
-        chucknorris()
-    }
-}
+//    }
+//    publishers {
+//        chucknorris()
+//    }
+//}
