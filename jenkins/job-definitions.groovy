@@ -75,7 +75,7 @@ branches.each {
     // yum install Bussmeyer-bussmeyer.github.io-1-11
 environments.each {
     job {
-        name "${project} - 2 Deployment Jobs - Deploy to ${it}".replaceAll('/','-')
+        name "${project} - 2 Deployment Jobs - Deploy to Dev".replaceAll('/','-')
         steps {
             //maven("test -Dproject.name=${project}/${branchName}")
         }
