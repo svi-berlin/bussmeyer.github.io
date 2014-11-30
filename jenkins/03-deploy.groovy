@@ -11,10 +11,10 @@
     // oder
     // yum remove Bussmeyer-bussmeyer.github.io
     // yum install Bussmeyer-bussmeyer.github.io-1-11
-
+def project = 'Bussmeyer/bussmeyer.github.io'
 
 job {
-    name "PP Test - 2 Deployment Jobs - Deploy to Dev".replaceAll('/','-')
+    name "${project} - 2 Deployment Jobs - Deploy to Dev".replaceAll('/','-')
     steps {
         //maven("test -Dproject.name=${project}/${branchName}")
     }
@@ -24,7 +24,7 @@ job {
 }
 
 job {
-    name "PP Test - 2 Deployment Jobs - Deploy to Test".replaceAll('/','-')
+    name "${project} - 2 Deployment Jobs - Deploy to Test".replaceAll('/','-')
     steps {
         //maven("test -Dproject.name=${project}/${branchName}")
     }
@@ -34,7 +34,7 @@ job {
 }
 
 job {
-    name "PP Test - 2 Deployment Jobs - Deploy to Live".replaceAll('/','-')
+    name "${project} - 2 Deployment Jobs - Deploy to Live".replaceAll('/','-')
     steps {
         //maven("test -Dproject.name=${project}/${branchName}")
     }
