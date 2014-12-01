@@ -2,7 +2,7 @@ def project = 'Bussmeyer/bussmeyer.github.io'
 def projectFiltered = "${project}".replaceAll('/','-')
 def branchApi = new URL("https://api.github.com/repos/${project}/branches")
 def branches = new groovy.json.JsonSlurper().parse(branchApi.newReader())
-def environments = ['Dev', 'Test', 'Live']
+def environments = [[name: "Dev", host:"web.local"], [name: "Test", host:"web.local"], [name: "Live", host:"web.local"]]
 
 // Creates a View for the Project
 view {
@@ -21,10 +21,8 @@ view {
     }
 }
 
-// https://github.com/jenkinsci/job-dsl-plugin/wiki/Tutorial---Using-the-Jenkins-Job-DSL
 // https://github.com/jenkinsci/job-dsl-plugin/wiki/Job-DSL-Commands
 // Namesschema ändern auf project - 1 Developer Jobs - Basic Build and Package -  branchName
-// Vars wie project über alle job sharen. Wie macht man einen include in groovy?
 branches.each {
     def branchName = it.name
     job {
@@ -37,7 +35,7 @@ branches.each {
         }
         steps {
         // Build
-        // Package
+            // Package with fpm
             def fpmCommandBasics = "fpm -s dir -t rpm --name ${project}-${branchName}".replaceAll('/','-')
             def fpmCommandVersions = '--version 1 --iteration ${BUILD_NUMBER}'
             def fpmCommandLogs = "--log info --verbose"
@@ -45,10 +43,11 @@ branches.each {
             def fpmCommandProject = '--maintainer "thomas.bussmeyer@pixelpark.com" --vendor "admin@pixelpark.com" --url "http://www.pixelpark.com" "${WORKSPACE}/src"'
             shell("${fpmCommandBasics} ${fpmCommandVersions} ${fpmCommandLogs} ${fpmCommandDesc} ${fpmCommandProject}")
 
+            // Move to repo.
             def workspace = '${WORKSPACE}'
             def buildNumber = '${BUILD_NUMBER}'
             shell('mv "' + workspace + '/' + projectFiltered + '-' + branchName + '-1-' + buildNumber + '.x86_64.rpm" /var/www/repo.local/artefacts')
-
+            shell("/usr/bin/createrepo --cachedir /var/cache/repo.local/artefacts --changelog-limit 5 --update /var/www/repo.local/artefacts 1>/dev/null")
         }
         publishers {
             chucknorris()
@@ -57,32 +56,17 @@ branches.each {
     }
 }
 
-// Copy Artifacts
-// Ein zentraler Job, der nachgelagert nach allen Buildjobs ausgeführt wird und die Artefakte an eine zentrale Stelle kopiert.
-
-// scp Bussmeyer-bussmeyer.github.io-1-13.x86_64.rpm vagrant@192.168.2.202:/var/www/repo.local/artefacts-6.5/
-// crontab anstoßen: /usr/bin/createrepo --cachedir /var/cache/repo.local/artefacts-6.5 --changelog-limit 5 --update /var/www/repo.local/artefacts-6.5 1>/dev/null
-
-
-// Deploy definitions
-// Parameter
-    // Environment
-    // Branch
-    // Artefakt/Buildnummer
-// Wenn Environment ein Param ist, dann reicht vielleicht auch ein Job?
-// Auf dem Zielserver:
-    // # yum clean expire-cache
-    // und
-    // yum update Bussmeyer-bussmeyer.github.io-1-11
-    // yum downgrade Bussmeyer-bussmeyer.github.io-1-11
-    // oder
-    // yum remove Bussmeyer-bussmeyer.github.io
-    // yum install Bussmeyer-bussmeyer.github.io-1-11
+// Environment
+// Branch
+// Artefakt/Buildnummer
 environments.each {
+    def environmentName = it.name
     job {
-        name "${project} - 2 Deployment Jobs - Deploy to Dev".replaceAll('/','-')
+        name "${project} - 2 Deployment Jobs - Deploy to ${environmentName}".replaceAll('/','-')
         steps {
-            //maven("test -Dproject.name=${project}/${branchName}")
+            shell("yum clean expire-cache")
+            shell("yum remove Bussmeyer-bussmeyer.github.io")
+            shell("yum install Bussmeyer-bussmeyer.github.io-1-11")
         }
         publishers {
             chucknorris()
