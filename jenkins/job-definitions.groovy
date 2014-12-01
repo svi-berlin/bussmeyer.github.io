@@ -62,12 +62,13 @@ branches.each {
 environments.each {
     def environmentId = it.id
     def environmentName = it.name
+    def buildNumber = '${BUILD_NUMBER}'
     job {
         name "${project} - 2.${environmentId} Deployment Jobs - Deploy to ${environmentName}".replaceAll('/','-')
         steps {
             shell("yum clean expire-cache")
             shell("yum remove Bussmeyer-bussmeyer.github.io")
-            shell("yum install Bussmeyer-bussmeyer.github.io-1-11")
+            shell('yum install Bussmeyer-bussmeyer.github.io-1-' + buildNumber)
         }
         publishers {
             chucknorris()
