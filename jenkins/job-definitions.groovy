@@ -44,6 +44,10 @@ branches.each {
             def fpmCommandDesc = '--description "${GIT_COMMIT}\n${GIT_BRANCH}\n${GIT_URL}\n${GIT_AUTHOR_EMAIL}\n${GIT_COMMITTER_EMAIL}"'
             def fpmCommandProject = '--maintainer "thomas.bussmeyer@pixelpark.com" --vendor "admin@pixelpark.com" --url "http://www.pixelpark.com" "${WORKSPACE}/src"'
             shell("${fpmCommandBasics} ${fpmCommandVersions} ${fpmCommandLogs} ${fpmCommandDesc} ${fpmCommandProject}")
+
+            // mv "${WORKSPACE}/Bussmeyer-bussmeyer.github.io-develop-1-${BUILD_NUMBER}.x86_64.rpm" /var/www/repo.local/artefacts
+            shell('mv "\"${WORKSPACE}\"/${project}-${branchName}-1-\"${BUILD_NUMBER}\".x86_64.rpm" /var/www/repo.local/artefacts')
+
         }
         publishers {
             chucknorris()
