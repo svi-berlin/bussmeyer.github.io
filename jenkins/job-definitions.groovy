@@ -2,7 +2,7 @@ def project = 'Bussmeyer/bussmeyer.github.io'
 def projectFiltered = "${project}".replaceAll('/','-')
 def branchApi = new URL("https://api.github.com/repos/${project}/branches")
 def branches = new groovy.json.JsonSlurper().parse(branchApi.newReader())
-def environments = [[id: "1", name: "Dev", host:"web.local"], [id: "2", name: "Test", host:"web.local"], [id: "3", name: "Live", host:"web.local"]]
+def environments = [[weight: "1", name: "Dev", host:"web.local"], [weight: "2", name: "Test", host:"web.local"], [weight: "3", name: "Live", host:"web.local"]]
 
 // Creates a View for the Project
 view {
@@ -60,10 +60,10 @@ branches.each {
 // Branch
 // Artefakt/Buildnummer
 environments.eachWithIndex {
-    def environmentId = it.id
+    def environmentWeight = it.weight
     def environmentName = it.name
     job {
-        name "${project} - 2.${environmentId} Deployment Jobs - Deploy to ${environmentName}".replaceAll('/','-')
+        name "${project} - 2.${environmentWeight} Deployment Jobs - Deploy to ${environmentName}".replaceAll('/','-')
         steps {
             shell("yum clean expire-cache")
             shell("yum remove Bussmeyer-bussmeyer.github.io")
