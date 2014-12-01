@@ -46,7 +46,7 @@ branches.each {
             shell("${fpmCommandBasics} ${fpmCommandVersions} ${fpmCommandLogs} ${fpmCommandDesc} ${fpmCommandProject}")
 
             // mv "${WORKSPACE}/Bussmeyer-bussmeyer.github.io-develop-1-${BUILD_NUMBER}.x86_64.rpm" /var/www/repo.local/artefacts
-            shell('mv "\"${WORKSPACE}\"/${project}-${branchName}-1-\"${BUILD_NUMBER}\".x86_64.rpm" /var/www/repo.local/artefacts')
+            shell("mv '\"${WORKSPACE}\"/${project}-${branchName}-1-\"${BUILD_NUMBER}\".x86_64.rpm' /var/www/repo.local/artefacts")
 
         }
         publishers {
