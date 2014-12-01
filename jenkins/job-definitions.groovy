@@ -59,10 +59,10 @@ branches.each {
 // Environment
 // Branch
 // Artefakt/Buildnummer
-environments.each {
-    def environmentName = it.name
+environments.eachWithIndex { obj, i
+    def environmentName = obj.name
     job {
-        name "${project} - 2 Deployment Jobs - Deploy to ${environmentName}".replaceAll('/','-')
+        name "${project} - ${i} Deployment Jobs - Deploy to ${environmentName}".replaceAll('/','-')
         steps {
             shell("yum clean expire-cache")
             shell("yum remove Bussmeyer-bussmeyer.github.io")
