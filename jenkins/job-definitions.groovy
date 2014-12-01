@@ -45,7 +45,6 @@ branches.each {
             def fpmCommandProject = '--maintainer "thomas.bussmeyer@pixelpark.com" --vendor "admin@pixelpark.com" --url "http://www.pixelpark.com" "${WORKSPACE}/src"'
             shell("${fpmCommandBasics} ${fpmCommandVersions} ${fpmCommandLogs} ${fpmCommandDesc} ${fpmCommandProject}")
 
-            // mv "${WORKSPACE}/Bussmeyer-bussmeyer.github.io-develop-1-${BUILD_NUMBER}.x86_64.rpm" /var/www/repo.local/artefacts
             def workspace = '${WORKSPACE}'
             def buildNumber = '${BUILD_NUMBER}'
             shell('mv "' + workspace + '/' + projectFiltered + '-' + branchName + '-1-' + buildNumber + '.x86_64.rpm" /var/www/repo.local/artefacts')
