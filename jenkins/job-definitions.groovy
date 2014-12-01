@@ -2,7 +2,7 @@ def project = 'Bussmeyer/bussmeyer.github.io'
 def projectFiltered = "${project}".replaceAll('/','-')
 def branchApi = new URL("https://api.github.com/repos/${project}/branches")
 def branches = new groovy.json.JsonSlurper().parse(branchApi.newReader())
-def environments = [[id: 1, name: "Dev", host:"web.local"], [id: 2, name: "Test", host:"web.local"], [id: 3, name: "Live", host:"web.local"]]
+def environments = [[id: "1", name: "Dev", host:"web.local"], [id: "2", name: "Test", host:"web.local"], [id: "3", name: "Live", host:"web.local"]]
 
 // Creates a View for the Project
 view {
