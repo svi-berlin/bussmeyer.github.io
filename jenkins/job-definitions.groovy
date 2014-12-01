@@ -48,7 +48,7 @@ branches.each {
             // mv "${WORKSPACE}/Bussmeyer-bussmeyer.github.io-develop-1-${BUILD_NUMBER}.x86_64.rpm" /var/www/repo.local/artefacts
             def workspace = '${WORKSPACE}'
             def buildNumber = '${BUILD_NUMBER}'
-            shell("mv '\"${workspace}/${projectFiltered}-${branchName}-1-${buildNumber}.x86_64.rpm\"' /var/www/repo.local/artefacts")
+            shell('mv "' + workspace + '/' + projectFiltered + '-' + branchName + '-1-' + buildNumber + '.x86_64.rpm" /var/www/repo.local/artefacts')
 
         }
         publishers {
