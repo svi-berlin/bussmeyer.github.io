@@ -1,5 +1,5 @@
 def project = 'Bussmeyer/bussmeyer.github.io'
-def projectFilter = "${project}".replaceAll('/','-')
+def projectFiltered = "${project}".replaceAll('/','-')
 def branchApi = new URL("https://api.github.com/repos/${project}/branches")
 def branches = new groovy.json.JsonSlurper().parse(branchApi.newReader())
 def environments = ['Dev', 'Test', 'Live']
@@ -8,7 +8,7 @@ def environments = ['Dev', 'Test', 'Live']
 view {
     name project.replaceAll('/','-')
     jobs {
-        regex(".*${projectFilter}.*")
+        regex(".*${projectFiltered}.*")
     }
     columns {
         status()
@@ -46,7 +46,9 @@ branches.each {
             shell("${fpmCommandBasics} ${fpmCommandVersions} ${fpmCommandLogs} ${fpmCommandDesc} ${fpmCommandProject}")
 
             // mv "${WORKSPACE}/Bussmeyer-bussmeyer.github.io-develop-1-${BUILD_NUMBER}.x86_64.rpm" /var/www/repo.local/artefacts
-            shell("mv '\"${WORKSPACE}\"/${project}-${branchName}-1-\"${BUILD_NUMBER}\".x86_64.rpm' /var/www/repo.local/artefacts")
+            def workspace = '${WORKSPACE}'
+            def buildNumber = '${BUILD_NUMBER}'
+            shell("mv ${workspace}/${projectFiltered}-${branchName}-1-${buildNumber}.x86_64.rpm' /var/www/repo.local/artefacts")
 
         }
         publishers {
