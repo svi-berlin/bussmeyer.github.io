@@ -4,7 +4,7 @@ def branchApi = new URL("https://api.github.com/repos/${project}/branches")
 def branches = new groovy.json.JsonSlurper().parse(branchApi.newReader())
 def environments = [[id: "1", name: "Dev", host:"web.local"], [id: "2", name: "Test", host:"web.local"], [id: "3", name: "Live", host:"web.local"]]
 
-// Creates a View for the Project
+// Create a view/tabs for this Project
 view {
     name project.replaceAll('/','-')
     jobs {
@@ -21,8 +21,8 @@ view {
     }
 }
 
+// Create a jobs for each branch
 // https://github.com/jenkinsci/job-dsl-plugin/wiki/Job-DSL-Commands
-// Namesschema ändern auf project - 1 Developer Jobs - Basic Build and Package -  branchName
 branches.each {
     def branchName = it.name
     job {
@@ -34,7 +34,8 @@ branches.each {
             // Wipe out repository & force clone
         }
         steps {
-        // Build
+            // Build
+                // TODO
             // Package with fpm
             def fpmCommandBasics = "fpm -s dir -t rpm --name ${project}-${branchName}".replaceAll('/','-')
             def fpmCommandVersions = '--version 1 --iteration ${BUILD_NUMBER}'
@@ -43,7 +44,7 @@ branches.each {
             def fpmCommandProject = '--maintainer "thomas.bussmeyer@pixelpark.com" --vendor "admin@pixelpark.com" --url "http://www.pixelpark.com" "${WORKSPACE}/src"'
             shell("${fpmCommandBasics} ${fpmCommandVersions} ${fpmCommandLogs} ${fpmCommandDesc} ${fpmCommandProject}")
 
-            // Move to repo.
+            // Move rpm to repo.
             def workspace = '${WORKSPACE}'
             def buildNumber = '${BUILD_NUMBER}'
             shell('mv "' + workspace + '/' + projectFiltered + '-' + branchName + '-1-' + buildNumber + '.x86_64.rpm" /var/www/repo.local/artefacts')
@@ -56,15 +57,20 @@ branches.each {
     }
 }
 
-// Environment
+// Create a job for each environment
 // Branch
 // Artefakt/Buildnummer
+
+def branchList = [ 'develop', 'master' ] as String[]
 environments.each {
     def environmentId = it.id
     def environmentName = it.name
     def buildNumber = '${BUILD_NUMBER}'
     job {
         name "${project} - 2.${environmentId} Deployment Jobs - Deploy to ${environmentName}".replaceAll('/','-')
+        parameters {
+            choiceParam('Branch', branchList, 'A list over branches to choose from.')
+        }
         steps {
             shell("yum clean expire-cache")
             shell("yum remove Bussmeyer-bussmeyer.github.io")
