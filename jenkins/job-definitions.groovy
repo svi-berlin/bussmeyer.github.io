@@ -61,7 +61,7 @@ branches.each {
 // Branch
 // Artefakt/Buildnummer
 
-def branchList = [ 'develop', 'master' ] as String[]
+def branchList = [ 'develop', 'master' ]
 environments.each {
     def environmentId = it.id
     def environmentName = it.name
