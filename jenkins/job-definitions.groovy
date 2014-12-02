@@ -62,8 +62,8 @@ def branchList = [ 'develop', 'master' ]
 environments.each {
     def environmentId = it.id
     def environmentName = it.name
-    def branchName = '${BRANCH}'
-    def buildNumber = '${BUILD}'
+    def branchName = '${Branch}'
+    def buildNumber = '${Build}'
     job {
         name "${project} - 2.${environmentId} Deployment Jobs - Deploy to ${environmentName}".replaceAll('/','-')
         parameters {
@@ -73,7 +73,7 @@ environments.each {
         steps {
             shell("yum clean expire-cache")
             shell("yum remove Bussmeyer-bussmeyer.github.io")
-            shell('yum install Bussmeyer-bussmeyer.github.io-' + branchName + '1-' + buildNumber)
+            shell('yum install Bussmeyer-bussmeyer.github.io-' + branchName + '-1-' + buildNumber)
         }
         publishers {
             chucknorris()
