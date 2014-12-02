@@ -25,8 +25,9 @@ view {
 // https://github.com/jenkinsci/job-dsl-plugin/wiki/Job-DSL-Commands
 branches.each {
     def branchName = it.name
+    def branchNameFiltered = it.name.replaceAll('/','-')
     job {
-        name "${project} - 1 Developer Jobs - Basic Build and Package - ${branchName}".replaceAll('/','-')
+        name "${projectFiltered} - 1 Developer Jobs - Basic Build and Package - ${branchNameFiltered}"
         scm {
             git("git://github.com/${project}.git", branchName)
             // Github Repo Browser einstellen
@@ -37,17 +38,17 @@ branches.each {
             // Build
                 // TODO
             // Package with fpm
-            def fpmCommandBasics = "fpm -s dir -t rpm --name ${project}-${branchName}".replaceAll('/','-')
+            def fpmCommandBasics = "fpm -s dir -t rpm --name ${projectFiltered}-${branchNameFiltered}"
             def fpmCommandVersions = '--version 1 --iteration ${BUILD_NUMBER}'
             def fpmCommandLogs = "--log info --verbose"
             def fpmCommandDesc = '--description "${GIT_COMMIT}\n${GIT_BRANCH}\n${GIT_URL}\n${GIT_AUTHOR_EMAIL}\n${GIT_COMMITTER_EMAIL}"'
-            def fpmCommandProject = '--maintainer "thomas.bussmeyer@pixelpark.com" --vendor "admin@pixelpark.com" --url "http://www.pixelpark.com" "${WORKSPACE}/src"'
+            def fpmCommandProject = '--maintainer "admin@pixelpark.com" --vendor "admin@pixelpark.com" --url "http://www.pixelpark.com" "${WORKSPACE}/src"'
             shell("${fpmCommandBasics} ${fpmCommandVersions} ${fpmCommandLogs} ${fpmCommandDesc} ${fpmCommandProject}")
 
             // Move rpm to repo.
             def workspace = '${WORKSPACE}'
             def buildNumber = '${BUILD_NUMBER}'
-            shell('mv "' + workspace + '/' + projectFiltered + '-' + branchName + '-1-' + buildNumber + '.x86_64.rpm" /var/lib/nexus/sonatype-work/nexus/storage/releases')
+            shell('mv "' + workspace + '/' + projectFiltered + '-' + branchNameFiltered + '-1-' + buildNumber + '.x86_64.rpm" /var/lib/nexus/sonatype-work/nexus/storage/releases')
             //shell("/usr/bin/createrepo --cachedir /var/cache/repo.local/artefacts --changelog-limit 5 --update /var/www/repo.local/artefacts 1>/dev/null")
         }
         publishers {
@@ -58,14 +59,17 @@ branches.each {
 }
 
 // Create a job for each environment
-def branchList = [ 'develop', 'master' ]
+def branchList = []
+branches.each {
+    branchList.add(it.name)
+}
 environments.each {
     def environmentId = it.id
     def environmentName = it.name
     def branchName = '${Branch}'
     def buildNumber = '${Build}'
     job {
-        name "${project} - 2.${environmentId} Deployment Jobs - Deploy to ${environmentName}".replaceAll('/','-')
+        name "${projectFiltered} - 2.${environmentId} Deployment Jobs - Deploy to ${environmentName}"
         parameters {
             choiceParam('Branch', branchList, 'A list over branches to choose from.')
             stringParam('Build', null, 'Please insert a valid build number.')
@@ -73,7 +77,7 @@ environments.each {
         steps {
             shell("yum clean expire-cache")
             shell("yum remove Bussmeyer-bussmeyer.github.io")
-            shell('yum install Bussmeyer-bussmeyer.github.io-' + branchName + '-1-' + buildNumber)
+            shell('yum install Bussmeyer-bussmeyer.github.io-' + branchNameFiltered + '-1-' + buildNumber)
         }
         publishers {
             chucknorris()
