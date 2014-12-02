@@ -58,9 +58,6 @@ branches.each {
 }
 
 // Create a job for each environment
-// Branch
-// Artefakt/Buildnummer
-
 def branchList = [ 'develop', 'master' ]
 environments.each {
     def environmentId = it.id
@@ -70,6 +67,7 @@ environments.each {
         name "${project} - 2.${environmentId} Deployment Jobs - Deploy to ${environmentName}".replaceAll('/','-')
         parameters {
             choiceParam('Branch', branchList, 'A list over branches to choose from.')
+            stringParam('Build number', null, 'Please insert a valid build number.')
         }
         steps {
             shell("yum clean expire-cache")
