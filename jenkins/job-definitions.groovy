@@ -48,7 +48,7 @@ branches.each {
             // Move rpm to repo.
             def workspace = '${WORKSPACE}'
             def buildNumber = '${BUILD_NUMBER}'
-            shell('mv "' + workspace + '/' + projectFiltered + '-' + branchNameFiltered + '-1-' + buildNumber + '.x86_64.rpm" /var/lib/nexus/sonatype-work/nexus/storage/releases')
+            shell('mv "' + workspace + '/' + projectFiltered + '-' + branchNameFiltered + '-1-' + buildNumber + '.x86_64.rpm" /var/lib/nexus/sonatype-work/nexus/storage/Bussmeyer-bussmeyer.github.io-Releases')
             //shell("/usr/bin/createrepo --cachedir /var/cache/repo.local/artefacts --changelog-limit 5 --update /var/www/repo.local/artefacts 1>/dev/null")
         }
         publishers {
