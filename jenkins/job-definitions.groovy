@@ -61,7 +61,7 @@ branches.each {
 // Create a job for each environment
 def branchList = []
 branches.each {
-    branchList.add(it.name)
+    branchList.add(it.name.replaceAll('/','-'))
 }
 environments.each {
     def environmentId = it.id
@@ -77,7 +77,7 @@ environments.each {
         steps {
             shell("yum clean expire-cache")
             shell("yum remove Bussmeyer-bussmeyer.github.io")
-            shell('yum install Bussmeyer-bussmeyer.github.io-' + branchNameFiltered + '-1-' + buildNumber)
+            //shell('yum install Bussmeyer-bussmeyer.github.io-' + branchNameFiltered + '-1-' + buildNumber)
         }
         publishers {
             chucknorris()
